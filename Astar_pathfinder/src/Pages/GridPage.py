@@ -6,11 +6,6 @@ from sys import exit
 from src.Astar_algorithm import *
 from src.config import *
 
-"""
----Anteckningar---
-Koden kraschar om ingen väg finns mellan start och goal pga obstacles.
- - hantera returneningen path = False
-"""
 
 class GridPage():
     """GridPage class defines the grid page"""
