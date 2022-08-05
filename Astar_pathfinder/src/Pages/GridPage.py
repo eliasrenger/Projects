@@ -144,8 +144,9 @@ class GridPage():
 
     def run(self):
         """Begins visualization of path."""
-        self.running = True
-        self.cleared = False
+        if self.start and self.goal:
+            self.running = True
+            self.cleared = False
 
     def pause(self):
         """Pauses visualization of path."""
