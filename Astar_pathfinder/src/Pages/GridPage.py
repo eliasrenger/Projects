@@ -139,7 +139,7 @@ class GridPage():
 
     def run(self):
         """Begins visualization of path."""
-        if self.start and self.goal:
+        if self.board.start and self.board.goal:
             self.running = True
             self.cleared = False
 
