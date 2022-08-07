@@ -5,6 +5,10 @@ from sys import exit
 # Internal imports
 from src.config import *
 
+"""
+Ändra muspekaren till ett streck som det gör när det går att skriva.
+"""
+
 class StartPage():
     """Class StartPage defines the startpage."""
     def __init__(self, screen, board):
@@ -83,7 +87,7 @@ class StartPage():
                 if self.create_plane_text_rect.collidepoint(event.pos) and event.button == 1:
                     if len(self.board_width_number) and len(self.board_height_number):
                         board_width, board_height = int(self.board_width_number), int(self.board_height_number)
-                        if board_width < 31 and board_height < 31:
+                        if 1< board_width < 31 and 1 < board_height < 31:
                             self.board.set_geometry(board_width, board_height)
                             self.board_width_number, self.board_height_number = "", ""
                             self.board_width_field_selected, self.board_height_field_selected = False, False
@@ -101,6 +105,7 @@ class StartPage():
                 elif self.board_width_field_selected or self.board_height_field_selected:
                     self.board_width_field_selected, self.board_height_field_selected = False, False
             if event.type == pg.KEYDOWN:
+                key = ""
                 if event.key == pg.K_BACKSPACE:
                     key = False
                 elif event.key == pg.K_0:
@@ -124,12 +129,12 @@ class StartPage():
                 elif event.key == pg.K_9:
                     key = "9"
                 if self.board_width_field_selected:
-                    if key:
+                    if type(key) == str:
                         self.board_width_number += key
                     else:
                         self.board_width_number = self.board_width_number[:-1]
                 elif self.board_height_field_selected:
-                    if key:
+                    if type(key) == str:
                         self.board_height_number += key
                     else:
                         self.board_height_number = self.board_height_number[:-1]
