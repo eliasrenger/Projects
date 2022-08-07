@@ -26,6 +26,7 @@ class GUI():
         self.screen = pg.display.set_mode(self.geometry)
         pg.display.set_caption(self.title)
         self.clock = pg.time.Clock()
+        self.fps = 10
         self.board = Board()
 
         self.start_page = StartPage(self.screen, self.board)
@@ -40,8 +41,7 @@ class GUI():
         current_page = self.pages[self.current_page_idx]
         page_idx = current_page.update()
         if page_idx == self.current_page_idx:
-            self.clock.tick(10)
-            self.update()
+            self.clock.tick(self.fps)
         else:
             self.set_screen(page_idx)
 

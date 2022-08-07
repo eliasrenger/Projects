@@ -10,7 +10,8 @@ class App():
         self.gui = GUI()
 
     def start(self):
-        self.gui.update()
+        while True:
+            self.gui.update()
 
 if __name__ == "__main__":
     app = App()
