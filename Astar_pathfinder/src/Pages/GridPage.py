@@ -25,6 +25,10 @@ class GridPage():
         self.button_width = int(0.94 * self.menu_width)
         self.button_marginal_width = int(0.03 * self.menu_width)
 
+        # colors
+        self.button_clr = (250, 250, 250)
+        self.hovered_button_clr = (190, 190, 190)
+
         # background and standard font
         self.background = pg.Surface((self.width, self.height))
         self.background.fill("Black")
@@ -206,20 +210,36 @@ class GridPage():
 
         # adds background and menu buttons to screen
         self.screen.blit(self.background, (0, 0))
+        mouse_pos = pg.mouse.get_pos()
 
-        self.screen.blit(self.run_button_surf, self.run_button_rect)
+        if self.run_button_rect.collidepoint(mouse_pos):
+            pg.draw.rect(self.screen, self.hovered_button_clr, self.run_button_rect)
+        else:
+            pg.draw.rect(self.screen, self.button_clr, self.run_button_rect)
         self.screen.blit(self.run_text_surf, self.run_text_rect)
 
-        self.screen.blit(self.pause_button_surf, self.pause_button_rect)
+        if self.pause_button_rect.collidepoint(mouse_pos):
+            pg.draw.rect(self.screen, self.hovered_button_clr, self.pause_button_rect)
+        else:
+            pg.draw.rect(self.screen, self.button_clr, self.pause_button_rect)
         self.screen.blit(self.pause_text_surf, self.pause_text_rect)
 
-        self.screen.blit(self.clear_button_surf, self.clear_button_rect)
+        if self.clear_button_rect.collidepoint(mouse_pos):
+            pg.draw.rect(self.screen, self.hovered_button_clr, self.clear_button_rect)
+        else:
+            pg.draw.rect(self.screen, self.button_clr, self.clear_button_rect)
         self.screen.blit(self.clear_text_surf, self.clear_text_rect)
 
-        self.screen.blit(self.back_button_surf, self.back_button_rect)
+        if self.back_button_rect.collidepoint(mouse_pos):
+            pg.draw.rect(self.screen, self.hovered_button_clr, self.back_button_rect)
+        else:
+            pg.draw.rect(self.screen, self.button_clr, self.back_button_rect)
         self.screen.blit(self.back_text_surf, self.back_text_rect)
 
-        self.screen.blit(self.instructions_button_surf, self.instructions_button_rect)
+        if self.instructions_button_rect.collidepoint(mouse_pos):
+            pg.draw.rect(self.screen, self.hovered_button_clr, self.instructions_button_rect)
+        else:
+            pg.draw.rect(self.screen, self.button_clr, self.instructions_button_rect)
         self.screen.blit(self.instructions_text_surf, self.instructions_text_rect)
 
         # effect of "movement" by adding one square per frame
