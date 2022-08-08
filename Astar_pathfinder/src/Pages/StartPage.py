@@ -16,8 +16,7 @@ class StartPage():
         """hmm"""
         self.screen = screen
         self.board = board
-        self.width = RES[0]
-        self.height = RES[1]
+        self.width, self.height = RES
         self.img = 0
         self.texts = []
         self.buttons = []
@@ -25,9 +24,6 @@ class StartPage():
         # fonts
         self.std_font = pg.font.Font(None, 30)
         self.title_font = pg.font.Font(None, 50)
-        self.fonts = {"std_font" : self.std_font,
-                      "title_font" : self.title_font
-                      }
 
         # colors
         self.background_clr = (240, 240, 245)
@@ -36,12 +32,6 @@ class StartPage():
         # background
         self.background = pg.Surface((self.width, self.height))
         self.background.fill(self.background_clr)
-
-        # fonts
-        self.std_font = pg.font.Font(None, 30)
-        self.title_font = pg.font.Font(None, 50)
-        self.fonts = {"std_font" : self.std_font,
-                        "title_font": self.title_font}
 
         # text
         self.title = APP_TITLE
@@ -66,45 +56,50 @@ class StartPage():
 
     def update(self):
         """Updates a frame and handles user input."""
+        # drives the blinking animation when field is selected
+        self.img = (self.img + 1) % 10
+
         # user input
-        self.img += 1
-        if self.img % 10 == 1:
-            self.img = 1
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if self.buttons[0].back_rect.collidepoint(event.pos) and event.button == 1:
+            # create_plane button logic
+            if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                if self.buttons[0].back_rect.collidepoint(event.pos):
                     if len(self.buttons[1].text) and len(self.buttons[2].text):
                         board_width, board_height = int(self.buttons[1].text), int(self.buttons[2].text)
                         for i in range(1, 3):
                             self.buttons[i].update_text("")
                             self.buttons[i].selected = False
-                        if 1 < board_width < 31 and 1 < board_height < 31:
+                            in_width_limit = board_width in range(2, 31)
+                            in_height_limit = board_height in range(2, 31)
+                        if in_width_limit and in_height_limit:  # makes sure the board is a reasonable size
                             self.board.set_geometry(board_width, board_height)
                             return 1
 
+                # sets selected button
                 for i in range(1, 3):
-                    if self.buttons[i].back_rect.collidepoint(event.pos) and event.button == 1:
+                    if self.buttons[i].back_rect.collidepoint(event.pos):
                         self.buttons[i].selected = True
                         self.img = 5
                     else:
                         self.buttons[i].selected = False
-
+            # inputs in field
             if event.type == pg.KEYDOWN:
-                key = ""
-                if 48 <= event.key <= 57:
-                    key = str(event.key - 48)  #converts key index to number
-                if event.key == pg.K_BACKSPACE:
-                    key = False
                 for button in self.buttons:
                     if button.selected:
-                        if type(key) == str:
-                            new_text = button.text + key
-                        else:
-                            new_text = button.text[:-1]
-                        button.update_text(new_text)
+                        break
+                else:
+                    continue
+                if 48 <= event.key <= 57:
+                    key = str(event.key - 48)  #converts key index to number
+                    new_text = button.text + key
+                elif event.key == pg.K_BACKSPACE:
+                    new_text = button.text[:-1]
+                else:
+                    continue
+                button.update_text(new_text)
 
         # puts surfaces on screen
         self.screen.blit(self.background, (0, 0))
@@ -116,11 +111,8 @@ class StartPage():
         for button in self.buttons:
             button.draw_button(mouse_pos)
 
-        for button in self.buttons:
-            if button.selected:
-                pass
-
-        if int(0.2 * self.img):
+        # blinking animation
+        if self.img >= 5:
             if self.buttons[1].selected:
                 self.width_field_selected.draw_text()
             elif self.buttons[2].selected:
