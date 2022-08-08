@@ -16,8 +16,7 @@ class GridPage():
         self.board = board
 
        # scales of parts of the screen
-        self.width = RES[0]
-        self.height = RES[1]
+        self.width, self.height = RES
         self.menu_width = 0.3 * self.width
         self.menu_center = int(self.menu_width / 2)
         self.button_height = int(0.9 * self.height / 6)
@@ -104,12 +103,12 @@ class GridPage():
         self.obstacle_surf = pg.Surface((self.sq_width, self.sq_height))
         self.neutral_surf = pg.Surface((self.sq_width, self.sq_height))
         self.visited_surf = pg.Surface((self.sq_width, self.sq_height))
-        self.start_surf.fill("Green")
-        self.goal_surf.fill("Red")
-        self.path_surf.fill("Blue")
+        self.start_surf.fill("#B5EAD6")
+        self.goal_surf.fill("#FFB8B1")
+        self.path_surf.fill("#9AB7D3")
         self.obstacle_surf.fill("Grey")
         self.neutral_surf.fill("White")
-        self.visited_surf.fill("Yellow")
+        self.visited_surf.fill("#DDF2FD")
 
         # creates grid of neutral squares
         neutral_squares = []
