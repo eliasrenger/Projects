@@ -5,22 +5,23 @@ from sys import exit
 # Internal imports
 from src.Astar_algorithm import *
 from src.config import *
+from src.pg_buttons_texts import *
 
 
 class GridPage():
     """GridPage class defines the grid page"""
     def __init__(self, screen, board):
         """"""
-        # objects needed to
+        # objects
         self.screen = screen
         self.board = board
 
-       # scales of parts of the screen
+        # scales parts of the screen
         self.width, self.height = RES
         self.menu_width = 0.3 * self.width
         self.menu_center = int(self.menu_width / 2)
-        self.button_height = int(0.9 * self.height / 6)
-        self.button_marginal_height = int(0.06 * self.height / 6)
+        self.button_height = int(0.9 * self.height / 8)
+        self.button_marginal_height = int(0.06 * self.height / 8)
         self.button_width = int(0.94 * self.menu_width)
         self.button_marginal_width = int(0.03 * self.menu_width)
 
@@ -32,45 +33,6 @@ class GridPage():
         self.background = pg.Surface((self.width, self.height))
         self.background.fill("Black")
         self.font = pg.font.Font(None, int(0.08 * self.height))
-
-        # run button
-        self.run_button_surf = pg.Surface((self.button_width, self.button_height))
-        self.run_button_surf.fill("White")
-        self.run_button_rect = self.run_button_surf.get_rect(center=(self.menu_center, int(self.button_marginal_height + 0.5 * self.button_height)))
-        self.run_text_surf = self.font.render("RUN", True, "Black")
-        self.run_text_rect = self.run_text_surf.get_rect(
-            center=(self.menu_center, int(1 * self.button_marginal_height + 0.5 * self.button_height)))
-
-        # pause button
-        self.pause_button_surf = pg.Surface((self.button_width, self.button_height))
-        self.pause_button_surf.fill("White")
-        self.pause_button_rect = self.pause_button_surf.get_rect(center=(self.menu_center, int(2 * self.button_marginal_height + 1.5 * self.button_height)))
-        self.pause_text_surf = self.font.render("PAUSE", True, "Black")
-        self.pause_text_rect = self.pause_text_surf.get_rect(
-            center=(self.menu_center, int(2 * self.button_marginal_height + 1.5 * self.button_height)))
-
-        # clear button
-        self.clear_button_surf = pg.Surface((self.button_width, self.button_height))
-        self.clear_button_surf.fill("White")
-        self.clear_button_rect = self.clear_button_surf.get_rect( center=(self.menu_center, int(3 * self.button_marginal_height + 2.5 * self.button_height)))
-        self.clear_text_surf = self.font.render("CLEAR", True, "Black")
-        self.clear_text_rect = self.clear_text_surf.get_rect(
-            center=(self.menu_center, int(3 * self.button_marginal_height + 2.5 * self.button_height)))
-
-        # back button
-        self.back_button_surf = pg.Surface((self.button_width, self.button_height))
-        self.back_button_surf.fill("White")
-        self.back_button_rect = self.back_button_surf.get_rect(center=(self.menu_center, int(4 * self.button_marginal_height + 3.5 * self.button_height)))
-        self.back_text_surf = self.font.render("BACK", True, "Black")
-        self.back_text_rect = self.back_text_surf.get_rect(
-            center=(self.menu_center, int(4 * self.button_marginal_height + 3.5 * self.button_height)))
-
-        # instructions button
-        self.instructions_button_surf = pg.Surface((self.button_width, self.button_height))
-        self.instructions_button_surf.fill("White")
-        self.instructions_button_rect = self.instructions_button_surf.get_rect(center=(self.menu_center, int(5 * self.button_marginal_height + 4.5 * self.button_height)))
-        self.instructions_text_surf = self.font.render("INSTRUCTIONS", True, "BLack")
-        self.instructions_text_rect = self.instructions_text_surf.get_rect(center = (self.menu_center, int(5 * self.button_marginal_height + 4.5 * self.button_height)))
 
         # defines states of the grid
         self.running = False
@@ -87,22 +49,101 @@ class GridPage():
         self.showed_visited_sq = []
         self.showed_path = []
 
+        # lists of buttons and surfaces
+        self.buttons = []
+
+        # run button
+        self.run_button = Button(self.screen, self.font, "center",
+                                 (self.menu_center, int(self.button_marginal_height + 0.5 * self.button_height)),
+                                 (self.button_width, self.button_height), self.button_clr, "RUN", self.hovered_button_clr)
+        self.buttons.append(self.run_button)
+        #self.run_button_surf = pg.Surface((self.button_width, self.button_height))
+        #self.run_button_surf.fill("White")
+        #self.run_button_rect = self.run_button_surf.get_rect(center=(self.menu_center, int(self.button_marginal_height + 0.5 * self.button_height)))
+        #self.run_text_surf = self.font.render("RUN", True, "Black")
+        #self.run_text_rect = self.run_text_surf.get_rect(
+        #    center=(self.menu_center, int(1 * self.button_marginal_height + 0.5 * self.button_height)))
+
+        # pause button
+        self.pause_button = Button(self.screen, self.font, "center",
+                                 (self.menu_center, int(2 * self.button_marginal_height + 1.5 * self.button_height)),
+                                 (self.button_width, self.button_height), self.button_clr, "PAUSE", self.hovered_button_clr)
+        self.buttons.append(self.pause_button)
+        #self.pause_button_surf = pg.Surface((self.button_width, self.button_height))
+        #self.pause_button_surf.fill("White")
+        #self.pause_button_rect = self.pause_button_surf.get_rect(center=(self.menu_center, int(2 * self.button_marginal_height + 1.5 * self.button_height)))
+        #self.pause_text_surf = self.font.render("PAUSE", True, "Black")
+        #self.pause_text_rect = self.pause_text_surf.get_rect(
+        #    center=(self.menu_center, int(2 * self.button_marginal_height + 1.5 * self.button_height)))
+
+        # clear button
+        self.clear_button = Button(self.screen, self.font, "center",
+                                 (self.menu_center, int(3 * self.button_marginal_height + 2.5 * self.button_height)),
+                                 (self.button_width, self.button_height), self.button_clr, "CLEAR", self.hovered_button_clr)
+        self.buttons.append(self.clear_button)
+        #self.clear_button_surf = pg.Surface((self.button_width, self.button_height))
+        #self.clear_button_surf.fill("White")
+        #self.clear_button_rect = self.clear_button_surf.get_rect( center=(self.menu_center, int(3 * self.button_marginal_height + 2.5 * self.button_height)))
+        #self.clear_text_surf = self.font.render("CLEAR", True, "Black")
+        #self.clear_text_rect = self.clear_text_surf.get_rect(
+        #    center=(self.menu_center, int(3 * self.button_marginal_height + 2.5 * self.button_height)))
+
+        # reset button
+        self.reset_button = Button(self.screen, self.font, "center",
+                                   (self.menu_center, int(4 * self.button_marginal_height + 3.5 * self.button_height)),
+                                   (self.button_width, self.button_height), self.button_clr, "RESET",
+                                   self.hovered_button_clr)
+        self.buttons.append(self.reset_button)
+
+        # randomize button
+        self.randomize_button = Button(self.screen, self.font, "center",
+                                 (self.menu_center, int(5 * self.button_marginal_height + 4.5 * self.button_height)),
+                                 (self.button_width, self.button_height), self.button_clr, "RANDOMIZE", self.hovered_button_clr)
+        self.buttons.append(self.randomize_button)
+
+        # back button
+        self.back_button = Button(self.screen, self.font, "center",
+                                 (self.menu_center, int(6 * self.button_marginal_height + 5.5 * self.button_height)),
+                                 (self.button_width, self.button_height), self.button_clr, "BACK", self.hovered_button_clr)
+        self.buttons.append(self.back_button)
+        #self.back_button_surf = pg.Surface((self.button_width, self.button_height))
+        #self.back_button_surf.fill("White")
+        #self.back_button_rect = self.back_button_surf.get_rect(center=(self.menu_center, int(4 * self.button_marginal_height + 3.5 * self.button_height)))
+        #self.back_text_surf = self.font.render("BACK", True, "Black")
+        #self.back_text_rect = self.back_text_surf.get_rect(
+        #    center=(self.menu_center, int(4 * self.button_marginal_height + 3.5 * self.button_height)))
+
+
+
+
+        # instructions button
+        self.instructions_button = Button(self.screen, self.font, "center",
+                                 (self.menu_center, int(7 * self.button_marginal_height + 6.5 * self.button_height)),
+                                 (self.button_width, self.button_height), self.button_clr, "INSTRUCTIONS", self.hovered_button_clr)
+        self.buttons.append(self.instructions_button)
+        #self.instructions_button_surf = pg.Surface((self.button_width, self.button_height))
+        #self.instructions_button_surf.fill("White")
+        #self.instructions_button_rect = self.instructions_button_surf.get_rect(center=(self.menu_center, int(5 * self.button_marginal_height + 4.5 * self.button_height)))
+        #self.instructions_text_surf = self.font.render("INSTRUCTIONS", True, "BLack")
+        #self.instructions_text_rect = self.instructions_text_surf.get_rect(center = (self.menu_center, int(5 * self.button_marginal_height + 4.5 * self.button_height)))
+
     def set_up_grid(self):
         """Defines the grid shown to user from geometry of the board."""
-        self.nr_sq_x = self.board.width
-        self.nr_sq_y = self.board.height
-        self.grid_marginal_width = int(0.05 * (self.width - self.menu_width) / (self.nr_sq_x + 1))
-        self.grid_marginal_height = int(0.05 * self.height / (self.nr_sq_y + 1))
-        self.sq_width = int(0.95 * (self.width - self.menu_width) / self.nr_sq_x)
-        self.sq_height = int(0.95 * self.height / self.nr_sq_y)
+        self.nr_sq_x, self.nr_sq_y = self.board.width, self.board.height
+        if (self.width - self.menu_width) / self.nr_sq_x < self.height / self.nr_sq_y:
+            self.grid_marginal = int(0.05 * (self.width - self.menu_width) / (self.nr_sq_x + 1))
+            self.sq_length = int(0.95 * (self.width - self.menu_width) / self.nr_sq_x)
+        else:
+            self.grid_marginal = int(0.05 * self.height / (self.nr_sq_y + 1))
+            self.sq_length = int(0.95 * self.height / self.nr_sq_y)
 
         # surfaces for squares
-        self.start_surf = pg.Surface((self.sq_width, self.sq_height))
-        self.goal_surf = pg.Surface((self.sq_width, self.sq_height))
-        self.path_surf = pg.Surface((self.sq_width, self.sq_height))
-        self.obstacle_surf = pg.Surface((self.sq_width, self.sq_height))
-        self.neutral_surf = pg.Surface((self.sq_width, self.sq_height))
-        self.visited_surf = pg.Surface((self.sq_width, self.sq_height))
+        self.start_surf = pg.Surface((self.sq_length, self.sq_length))
+        self.goal_surf = pg.Surface((self.sq_length, self.sq_length))
+        self.path_surf = pg.Surface((self.sq_length, self.sq_length))
+        self.obstacle_surf = pg.Surface((self.sq_length, self.sq_length))
+        self.neutral_surf = pg.Surface((self.sq_length, self.sq_length))
+        self.visited_surf = pg.Surface((self.sq_length, self.sq_length))
         self.start_surf.fill("#B5EAD6")
         self.goal_surf.fill("#FFB8B1")
         self.path_surf.fill("#9AB7D3")
@@ -112,8 +153,8 @@ class GridPage():
 
         # creates grid of neutral squares
         neutral_squares = []
-        for i in range(self.board.width):
-            for j in range(self.board.height):
+        for i in range(self.nr_sq_x):
+            for j in range(self.nr_sq_y):
                 neutral_squares.append((i + 1, j + 1))
         self.neutral_squares = self.squares_to_screen_coordinates(neutral_squares)
 
@@ -133,13 +174,6 @@ class GridPage():
         if self.path:
             self.path = self.squares_to_screen_coordinates(self.path)
 
-    def clear(self):
-        """Removes shown path."""
-        self.showed_path = []
-        self.showed_visited_sq = []
-        self.running = False
-        self.cleared = True
-
     def run(self):
         """Begins visualization of path."""
         if self.board.start and self.board.goal:
@@ -149,6 +183,29 @@ class GridPage():
     def pause(self):
         """Pauses visualization of path."""
         self.running = False
+
+    def clear(self):
+        """Removes shown path."""
+        self.showed_path = []
+        self.showed_visited_sq = []
+        self.running = False
+        self.cleared = True
+
+    def randomize(self):
+        self.path = None
+        while not (self.board.start and self.board.goal):
+            self.board.randomize_start_goal()
+        self.clear()
+        while not self.path:
+            self.board.randomize_obstacles()
+            self.find_path()
+        self.set_up_grid()
+
+    def reset_board(self):
+        self.clear()
+        self.board.obstacles = []
+        self.board.set_start(None)
+        self.board.set_goal(None)
 
     def update(self):
         """Updates a frame and handles user input."""
@@ -164,23 +221,25 @@ class GridPage():
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     # shows path for user
-                    if self.run_button_rect.collidepoint(event.pos):
+                    if self.run_button.back_rect.collidepoint(event.pos):
                         self.run()
                     # pause path visualization
-                    elif self.pause_button_rect.collidepoint(event.pos):
+                    elif self.pause_button.back_rect.collidepoint(event.pos):
                         self.pause()
                     # clears shown path
-                    elif self.clear_button_rect.collidepoint(event.pos):
+                    elif self.clear_button.back_rect.collidepoint(event.pos):
                         self.clear()
+                    elif self.reset_button.back_rect.collidepoint(event.pos):
+                        self.reset_board()
+                    # randomize obstacles on board
+                    elif self.randomize_button.back_rect.collidepoint(event.pos):
+                        self.randomize()
                     # user returns to StartPage
-                    elif self.back_button_rect.collidepoint(event.pos):
-                        self.clear()
-                        self.board.obstacles = []
-                        self.board.set_start(None)
-                        self.board.set_goal(None)
+                    elif self.back_button.back_rect.collidepoint(event.pos):
+                        self.reset_board()
                         return 0
                     # user opens InstructionsPage
-                    elif self.instructions_button_rect.collidepoint(event.pos):
+                    elif self.instructions_button.back_rect.collidepoint(event.pos):
                         self.clear()
                         return 2
                     elif self.cleared:
@@ -207,39 +266,13 @@ class GridPage():
             self.set_up_squares()
             self.find_path()
 
-        # adds background and menu buttons to screen
+        # adds background
         self.screen.blit(self.background, (0, 0))
+
+        # display buttons
         mouse_pos = pg.mouse.get_pos()
-
-        if self.run_button_rect.collidepoint(mouse_pos):
-            pg.draw.rect(self.screen, self.hovered_button_clr, self.run_button_rect)
-        else:
-            pg.draw.rect(self.screen, self.button_clr, self.run_button_rect)
-        self.screen.blit(self.run_text_surf, self.run_text_rect)
-
-        if self.pause_button_rect.collidepoint(mouse_pos):
-            pg.draw.rect(self.screen, self.hovered_button_clr, self.pause_button_rect)
-        else:
-            pg.draw.rect(self.screen, self.button_clr, self.pause_button_rect)
-        self.screen.blit(self.pause_text_surf, self.pause_text_rect)
-
-        if self.clear_button_rect.collidepoint(mouse_pos):
-            pg.draw.rect(self.screen, self.hovered_button_clr, self.clear_button_rect)
-        else:
-            pg.draw.rect(self.screen, self.button_clr, self.clear_button_rect)
-        self.screen.blit(self.clear_text_surf, self.clear_text_rect)
-
-        if self.back_button_rect.collidepoint(mouse_pos):
-            pg.draw.rect(self.screen, self.hovered_button_clr, self.back_button_rect)
-        else:
-            pg.draw.rect(self.screen, self.button_clr, self.back_button_rect)
-        self.screen.blit(self.back_text_surf, self.back_text_rect)
-
-        if self.instructions_button_rect.collidepoint(mouse_pos):
-            pg.draw.rect(self.screen, self.hovered_button_clr, self.instructions_button_rect)
-        else:
-            pg.draw.rect(self.screen, self.button_clr, self.instructions_button_rect)
-        self.screen.blit(self.instructions_text_surf, self.instructions_text_rect)
+        for button in self.buttons:
+            button.display_button(mouse_pos)
 
         # effect of "movement" by adding one square per frame
         if self.running:
@@ -276,8 +309,8 @@ class GridPage():
         new_cords = []
         for cord in cords:
             if cord:
-                new_x = int(self.menu_width + self.grid_marginal_width + (cord[0] - 1) * (self.sq_width + self.grid_marginal_width))
-                new_y = int(self.grid_marginal_height + (cord[1] - 1) * (self.sq_height + self.grid_marginal_height))
+                new_x = int(self.menu_width + self.grid_marginal + (cord[0] - 1) * (self.sq_length + self.grid_marginal))
+                new_y = int(self.grid_marginal + (cord[1] - 1) * (self.sq_length + self.grid_marginal))
                 new_cords.append((new_x, new_y))
             else:
                 new_cords.append(None)  # undersök om detta behövs och vad det leder till om det inträffar
@@ -285,6 +318,6 @@ class GridPage():
 
     def screen_coordinate_to_square(self, cord):
         """Converts coordinate on screen to a square on the board."""
-        new_x = int((cord[0] - self.menu_width + self.sq_width) / (self.sq_width + self.grid_marginal_width))
-        new_y = int((cord[1]  + self.sq_height) / (self.sq_height + self.grid_marginal_height))
+        new_x = int((cord[0] - self.menu_width + self.sq_length) / (self.sq_length + self.grid_marginal))
+        new_y = int((cord[1]  + self.sq_length) / (self.sq_length + self.grid_marginal))
         return (new_x, new_y)

@@ -1,5 +1,6 @@
 # External imports
 from queue import PriorityQueue
+import random as rn
 
 class Board():
     """The 2D space we are navigating based on squares."""
@@ -26,7 +27,8 @@ class Board():
         if cord:
             x = cord[0]
             y = cord[1]
-            if self.walkable_square(x, y):
+            is_goal = ((x,y) == self.goal)
+            if self.walkable_square(x, y) and not is_goal:
                 self.start = (x, y)
                 self.squares_changed = True
         else:
@@ -37,7 +39,8 @@ class Board():
         if cord:
             x = cord[0]
             y = cord[1]
-            if self.walkable_square(x, y):
+            is_start = ((x,y) == self.start)
+            if self.walkable_square(x, y) and not is_start:
                 self.goal = (x, y)
                 self.squares_changed = True
         else:
@@ -51,6 +54,23 @@ class Board():
 
     def remove_obstacle(self, cord):
         self.obstacles.remove(cord)
+        self.squares_changed = True
+
+    def randomize_obstacles(self):
+        self.obstacles = []
+        probability = rn.uniform(3, 10)
+        for i in range(self.width):
+            for j in range(self.height):
+                a, b = i+1, j+1
+                is_obstacle = rn.choices([True, False], [probability, 10-probability])[0]
+                is_start_goal = ((a, b) == self.start or (a, b) == self.goal)
+                if is_obstacle and not is_start_goal:
+                    self.add_obstacle((a, b))
+        self.squares_changed = True
+
+    def randomize_start_goal(self):
+        self.set_start((rn.randint(1, self.width + 1), rn.randint(1, self.height+ 1)))
+        self.set_goal((rn.randint(1, self.width + 1), rn.randint(1, self.height + 1)))
         self.squares_changed = True
 
     def walkable_square(self, x, y):
@@ -96,14 +116,14 @@ class Board():
                     q.put(child)
                 while current[2] in visited_queue:
                     if q.empty():
-                        return False, visited_queue
+                        return None, visited_queue
                     current = q.get()
                 visited_queue.append(current[2])
                 if current[2] == self.goal:
                     path = current[3]
             return path, visited_queue
         else:
-            return False, []
+            return None, []
 
 
 def getdist(cord1, cord2):
