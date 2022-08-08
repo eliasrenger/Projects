@@ -113,8 +113,8 @@ class GridPage():
 
         # creates grid of neutral squares
         neutral_squares = []
-        for i in range(self.board.height):
-            for j in range(self.board.width):
+        for i in range(self.board.width):
+            for j in range(self.board.height):
                 neutral_squares.append((i + 1, j + 1))
         self.neutral_squares = self.squares_to_screen_coordinates(neutral_squares)
 
