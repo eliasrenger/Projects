@@ -4,7 +4,7 @@ from sys import exit
 
 # Internal imports
 from src.config import *
-from src.pg_buttons_and_texts import *
+from src.pg_buttons_texts import *
 
 """
 Ändra muspekaren till ett streck som det gör när det går att skriva.
@@ -27,7 +27,7 @@ class StartPage():
 
         # colors
         self.background_clr = (240, 240, 245)
-        self.selected_button_clr = (170, 170, 170)
+        self.hovered_button_clr = (170, 170, 170)
 
         # background
         self.background = pg.Surface((self.width, self.height))
@@ -48,7 +48,7 @@ class StartPage():
 
         # buttons
         self.buttons.append(Button(self.screen, self.std_font, "center", (int(0.8 * self.width), int(0.8 * self.height)),
-                                   (130,40), self.background_clr, "Create plane", self.selected_button_clr))
+                                   (130,40), self.background_clr, "Create plane", self.hovered_button_clr))
         self.buttons.append(Button(self.screen, self.std_font, "midright", (int(0.9 * self.width) - 10, int(0.4 * self.height)), (100, 25),
                                    "White", "", "White", (int(0.9 * self.width), int(0.4 * self.height)), "midright"))
         self.buttons.append(Button(self.screen, self.std_font, "midright", (int(0.9 * self.width) - 10, int(0.6 * self.height)), (100, 25),
@@ -57,7 +57,7 @@ class StartPage():
     def update(self):
         """Updates a frame and handles user input."""
         # drives the blinking animation when field is selected
-        self.img = (self.img + 1) % 10
+        self.img = (self.img + 1) % 16
 
         # user input
         for event in pg.event.get():
@@ -106,17 +106,17 @@ class StartPage():
 
         mouse_pos = pg.mouse.get_pos()
         for text in self.texts:
-            text.draw_text()
+            text.display_text()
 
         for button in self.buttons:
-            button.draw_button(mouse_pos)
+            button.display_button(mouse_pos)
 
         # blinking animation
-        if self.img >= 5:
+        if self.img >= 8:
             if self.buttons[1].selected:
-                self.width_field_selected.draw_text()
+                self.width_field_selected.display_text()
             elif self.buttons[2].selected:
-                self.height_field_selected.draw_text()
+                self.height_field_selected.display_text()
 
         pg.display.update()
         return 0

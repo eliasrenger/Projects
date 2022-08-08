@@ -26,7 +26,7 @@ class GUI():
         self.screen = pg.display.set_mode(self.geometry)
         pg.display.set_caption(self.title)
         self.clock = pg.time.Clock()
-        self.fps = 10
+        self.fps = 16
         self.board = Board()
 
         self.start_page = StartPage(self.screen, self.board)
