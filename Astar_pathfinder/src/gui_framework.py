@@ -1,6 +1,11 @@
 # External imports
 import pygame as pg
 
+"""
+add class textbox
+add action function for buttons
+"""
+
 class Text():
 
     def __init__(self, screen, font, text_point, text_pos, text = "", text_clr = (0, 0, 0)):
@@ -12,7 +17,7 @@ class Text():
         self.text_rect = self.text_surf.get_rect()
         self.place(self.text_rect, text_point, text_pos)
 
-    def draw_text(self):
+    def display_text(self):
         self.screen.blit(self.text_surf, self.text_rect)
 
     def place(self, rectangle, point, position):
@@ -49,7 +54,7 @@ class Button(Text):
 
         self.selected = False
 
-    def draw_button(self, mousepos = False):
+    def display_button(self, mousepos = False):
         self.hovered(mousepos)
         pg.draw.rect(self.screen, self.back_cur_clr, self.back_rect)
         self.screen.blit(self.text_surf, self.text_rect)
@@ -71,3 +76,16 @@ class Button(Text):
             self.selected = False
         else:
             self.selected = True
+
+
+class Textbox(Button):
+
+    def __init__(self, screen, font, text_point, text_pos, size, back_clr = None, text = "",
+                 back_pos = None, back_point = None, back_clr_hovered = None, text_clr = (0, 0, 0)):
+        super().__init__(screen, font, text_point, text_pos, size, back_clr, text,
+                 back_clr_hovered, back_pos, back_point, text_clr)
+        pass
+
+
+    def animation(self):
+        pass
