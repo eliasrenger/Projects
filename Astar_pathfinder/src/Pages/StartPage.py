@@ -4,7 +4,7 @@ from sys import exit
 
 # Internal imports
 from src.config import *
-from src.pg_buttons_texts import *
+from src.gui_framework import *
 
 """
 Ändra muspekaren till ett streck som det gör när det går att skriva.
