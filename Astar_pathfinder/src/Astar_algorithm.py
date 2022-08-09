@@ -69,8 +69,10 @@ class Board():
         self.squares_changed = True
 
     def randomize_start_goal(self):
-        self.set_start((rn.randint(1, self.width + 1), rn.randint(1, self.height+ 1)))
-        self.set_goal((rn.randint(1, self.width + 1), rn.randint(1, self.height + 1)))
+        self.start, self.goal = None, None
+        while not (self.start and self.goal):
+            self.set_start((rn.randint(1, self.width + 1), rn.randint(1, self.height+ 1)))
+            self.set_goal((rn.randint(1, self.width + 1), rn.randint(1, self.height + 1)))
         self.squares_changed = True
 
     def walkable_square(self, x, y):
